@@ -1,11 +1,11 @@
-var CryptoJS = require("crypto-js")
+let CryptoJS = require("crypto-js")
 
-var key = CryptoJS.enc.Utf8.parse("22453260");
-let iv = CryptoJS.enc.Utf8.parse("023145543211234569662334");
+let key = CryptoJS.enc.Utf8.parse("023145543211234569662334");
+let IV = CryptoJS.enc.Utf8.parse("22453260");
 
 function encrypt(data) {
-    var encrypted = CryptoJS.TripleDES.encrypt(data, key, {
-        iv: iv,
+    let encrypted = CryptoJS.TripleDES.encrypt(data, key, {
+        iv: IV,
         mode: CryptoJS.mode.CBC,
     });
     return encrypted.toString();
@@ -13,17 +13,24 @@ function encrypt(data) {
 
 function decrypt(data) {
     let decrypted = CryptoJS.TripleDES.decrypt(data, key, {
-        iv: iv,
+        iv: IV,
         mode: CryptoJS.mode.CBC
     });
     return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
-console.log(decrypt(`85PzdKDoXRR8FyIjiBjvcjlJb8eg4JiboiZjyMHOR/o=`));
-console.log(encrypt(`{"status":1,"msg":"system err"}`));
+function encryptAES(data){
+    const key = CryptoJS.enc.Hex.parse("023145543211234569662334");
+    const passphrase = CryptoJS.enc.Hex.parse("22453260");
+    const encrypted = CryptoJS.AES.encrypt(payload, key, {
+        iv: passphrase, 
+        mode: CryptoJS.mode.CBC, 
+        padding: CryptoJS.pad.Pkcs7
+    });
+    console.log(encrypted);
+}
 
-/*
-* DESede [used in java] is the same as TripleDES
-* padding is not matter
-*
-**/
+console.log(decrypt(`85PzdKDoXRR8FyIjiBjvcjlJb8eg4JiboiZjyMHOR/o=`));
+//console.log(decrypt(`KYQmWID39MJZ3NolGlqfvSpqHwfDgq7P8wYsm0134Mo=`));
+
+console.log(encrypt(`{"status":1,"msg":"system err"}`));
